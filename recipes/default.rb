@@ -49,7 +49,7 @@ if node['tomcat']['install_from_package']
     end
   end
 elsif node['tomcat']['install_from_tarball']
-  ark 'apache-tomcat' do
+  ark node['tomcat']['tarball_name'] do
     url node['tomcat']['tarball_url']
     path node['tomcat']['base']
     action :put

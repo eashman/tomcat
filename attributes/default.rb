@@ -49,6 +49,7 @@ default['tomcat']['instances'] = {}
 default['tomcat']['run_base_instance'] = true
 default['tomcat']['install_from_tarball'] = false
 default['tomcat']['install_from_package'] = true
+default['tomcat']['tarball_name'] = 'tomcat7'
 
 case node['platform']
 
