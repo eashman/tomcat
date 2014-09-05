@@ -37,14 +37,22 @@ if node['tomcat']['deploy_manager_apps']
       'default' => "tomcat#{node['tomcat']['base_version']}-admin-webapps",
     }
     )
-end
+end 
 
-tomcat_pkgs.compact!
-
-tomcat_pkgs.each do |pkg|
-  package pkg do
-    action :install
-    version node['tomcat']['base_version'].to_s if platform_family?('smartos')
+if node['tomcat']['install_from_package']
+  tomcat_pkgs.compact!
+  
+  tomcat_pkgs.each do |pkg|
+    package pkg do
+      action :install
+      version node['tomcat']['base_version'].to_s if platform_family?('smartos')
+    end
+  end
+elsif node['tomcat']['install_from_tarball']
+  ark 'apache-tomcat' do
+    url node['tomcat']['tarball_url']
+    path node['tomcat']['base']
+    action :put
   end
 end
 
