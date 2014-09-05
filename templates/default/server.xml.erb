@@ -101,7 +101,7 @@
     <!-- Define a SSL HTTP/1.1 Connector on port <%= @ssl_port %>
          This connector uses the JSSE configuration, when using APR, the
          connector should be using the OpenSSL style configuration
-         described in the APR documentation -->
+         described in the APR documentation
     <Connector port="<%= @ssl_port %>" protocol="HTTP/1.1" SSLEnabled="true"
              <% if @ssl_proxy_port -%>
                proxyPort="<%= @ssl_proxy_port %>"
@@ -112,6 +112,7 @@
                truststorePass="<%= node['tomcat']['keystore_password'] %>"
                maxThreads="<%= @ssl_max_threads %>" scheme="https" secure="true"
                clientAuth="false" sslProtocol="TLS" />
+      -->
   <% end -%>
 
   <% if @ajp_port -%>
