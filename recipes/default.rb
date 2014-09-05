@@ -51,7 +51,8 @@ if node['tomcat']['install_from_package']
 elsif node['tomcat']['install_from_tarball']
   ark node['tomcat']['tarball_name'] do
     url node['tomcat']['tarball_url']
-    path node['tomcat']['base']
+    path node['tomcat']['tarball_install_path']
+    owner node['tomcat']['user']
     action :put
   end
 end

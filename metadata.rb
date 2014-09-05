@@ -8,6 +8,7 @@ version          '0.16.2'
 
 depends 'java'
 depends 'openssl'
+depends 'ark'
 
 supports 'debian'
 supports 'ubuntu'
