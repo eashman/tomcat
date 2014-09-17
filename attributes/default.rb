@@ -52,6 +52,7 @@ default['tomcat']['install_from_tarball'] = false
 default['tomcat']['install_from_package'] = true
 default['tomcat']['tarball_name'] = 'tomcat7'
 default['tomcat']['tarball_install_path'] = '/opt'
+default['tomcat']['include_java'] = true
 
 case node['platform']
 

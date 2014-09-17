@@ -20,7 +20,9 @@
 # required for the secure_password method from the openssl cookbook
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 
-include_recipe 'java'
+if node['tomcat']['include_java']
+  include_recipe 'java'
+end
 
 tomcat_pkgs = value_for_platform(
   ['smartos'] => {
