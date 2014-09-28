@@ -92,9 +92,11 @@ action :configure do
   end
 
   # Even for the base instance, the OS package may not make this directory
-  directory new_resource.endorsed_dir do
-    mode '0755'
-    recursive true
+  unless Dir.exist? new_resource.endorsed_dir
+    directory new_resource.endorsed_dir do
+      mode '0755'
+      recursive true
+    end
   end
 
   unless new_resource.truststore_file.nil?
