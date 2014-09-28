@@ -41,23 +41,23 @@ if node['tomcat']['deploy_manager_apps']
     )
 end 
 
-if node['tomcat']['install_from_package']
-  tomcat_pkgs.compact!
-  
-  tomcat_pkgs.each do |pkg|
-    package pkg do
-      action :install
-      version node['tomcat']['base_version'].to_s if platform_family?('smartos')
-    end
-  end
-elsif node['tomcat']['install_from_tarball']
+#if node['tomcat']['install_from_package']
+#  tomcat_pkgs.compact!
+#  
+#  tomcat_pkgs.each do |pkg|
+#    package pkg do
+#      action :install
+#      version node['tomcat']['base_version'].to_s if platform_family?('smartos')
+#    end
+#  end
+#elsif node['tomcat']['install_from_tarball']
   ark node['tomcat']['tarball_name'] do
     url node['tomcat']['tarball_url']
     path node['tomcat']['tarball_install_path']
     owner node['tomcat']['user']
     action :put
   end
-end
+#end
 
 unless node['tomcat']['deploy_manager_apps']
   directory "#{node['tomcat']['webapp_dir']}/manager" do
