@@ -72,6 +72,7 @@ when 'centos', 'redhat', 'fedora', 'amazon', 'scientific', 'oracle'
   default['tomcat']['keytool'] = 'keytool'
   default['tomcat']['lib_dir'] = "#{node["tomcat"]["home"]}/lib"
   default['tomcat']['endorsed_dir'] = "#{node["tomcat"]["lib_dir"]}/endorsed"
+  #default['tomcat']['pid'] = "/var/run/tomcat.pid"
   default['tomcat']['deploy_manager_packages'] = ["tomcat#{node['tomcat']['base_version']}-admin-webapps"]
 when 'debian', 'ubuntu'
   default['tomcat']['user'] = "tomcat#{node["tomcat"]["base_version"]}"

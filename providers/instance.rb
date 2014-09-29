@@ -10,7 +10,7 @@ action :configure do
    :max_threads, :ssl_max_threads, :ssl_cert_file, :ssl_key_file,
    :ssl_chain_files, :keystore_file, :keystore_type, :truststore_file,
    :truststore_type, :certificate_dn, :loglevel, :tomcat_auth, :user,
-   :group, :tmp_dir, :lib_dir, :endorsed_dir].each do |attr|
+   :group, :tmp_dir, :lib_dir, :endorsed_dir, :pid].each do |attr|
     if not new_resource.instance_variable_get("@#{attr}")
       new_resource.instance_variable_set("@#{attr}", node['tomcat'][attr])
     end
@@ -29,6 +29,13 @@ action :configure do
   else
     # Use a unique name for this instance
     instance = "#{base_instance}-#{new_resource.name}"
+
+
+    # Add unique PID file for this instance
+    if not new_resource.instance_variable_get("@pid")
+      new_resource.instance_variable_set("@pid", "/var/run/#{instance}.pid")
+    end
+
 
     # If they weren't set explicitly, set these paths to the default with
     # the base instance name replaced with our own
@@ -130,7 +137,8 @@ action :configure do
                     :use_security_manager => new_resource.use_security_manager,
                     :tmp_dir => new_resource.tmp_dir,
                     :catalina_options => new_resource.catalina_options,
-                    :endorsed_dir => new_resource.endorsed_dir
+                    :endorsed_dir => new_resource.endorsed_dir,
+                    :pid => new_resource.pid
                 })
       owner 'root'
       group 'root'
