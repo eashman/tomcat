@@ -92,15 +92,14 @@ action :configure do
     execute "/etc/init.d/#{instance}" do
       command <<-EOH
         cp /etc/init.d/#{base_instance} /etc/init.d/#{instance}
-        perl -i -pe 's/#{base_instance}/#{instance}/g' /etc/init.d/#{instance}
+       # perl -i -pe 's/#{base_instance}/#{instance}/g' /etc/init.d/#{instance}
       EOH
     end
-    execute "/usr/sbin/#{instance}" do
-      command <<-EOH
-        cp /usr/sbin/#{base_instance} /usr/sbin/#{instance}
-        perl -i -pe 's/#{base_instance}/#{instance}/g' /usr/sbin/#{instance}
-      EOH
-    end
+   # execute "/usr/sbin/#{instance}" do
+   #   command <<-EOH
+   #     ln -s /usr/sbin/#{base_instance} /usr/sbin/#{instance}
+   #   EOH
+   # end
   end
 
   # Even for the base instance, the OS package may not make this directory
