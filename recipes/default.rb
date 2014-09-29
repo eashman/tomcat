@@ -20,44 +20,38 @@
 # required for the secure_password method from the openssl cookbook
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 
-if node['tomcat']['include_java']
-  include_recipe 'java'
+include_recipe 'java'
+
+if node['platform'] == 'centos'
+  if node['tomcat']['base_version'] == 7
+    include_recipe 'yum-epel'
+    node.default['tomcat']['packages'] = ['tomcat']
+    node.default['tomcat']['deploy_manager_packages'] = ['tomcat-admin-webapps']
+    node.default['tomcat']['home'] = "/usr/share/tomcat"
+    node.default['tomcat']['base'] = "/usr/share/tomcat"
+    node.default['tomcat']['config_dir'] = "/etc/tomcat"
+    node.default['tomcat']['log_dir'] = "/var/log/tomcat"
+    node.default['tomcat']['tmp_dir'] = "/var/cache/tomcat/temp"
+    node.default['tomcat']['work_dir'] = "/var/cache/tomcat/work"
+    node.default['tomcat']['context_dir'] = "#{node["tomcat"]["config_dir"]}/Catalina/localhost"
+    node.default['tomcat']['webapp_dir'] = "/var/lib/tomcat/webapps"
+    node.default['tomcat']['lib_dir'] = "#{node["tomcat"]["home"]}/lib"
+    node.default['tomcat']['endorsed_dir'] = "#{node["tomcat"]["lib_dir"]}/endorsed"
+  end
 end
 
-tomcat_pkgs = value_for_platform(
-  ['smartos'] => {
-    'default' => ['apache-tomcat'],
-  },
-  'default' => ["tomcat#{node['tomcat']['base_version']}"]
-  )
-if node['tomcat']['deploy_manager_apps']
-  tomcat_pkgs << value_for_platform(
-    %w{ debian  ubuntu } => {
-      'default' => "tomcat#{node['tomcat']['base_version']}-admin",
-    },    
-    %w{ centos redhat fedora amazon scientific oracle } => {
-      'default' => "tomcat#{node['tomcat']['base_version']}-admin-webapps",
-    }
-    )
-end 
-
-#if node['tomcat']['install_from_package']
-#  tomcat_pkgs.compact!
-#  
-#  tomcat_pkgs.each do |pkg|
-#    package pkg do
-#      action :install
-#      version node['tomcat']['base_version'].to_s if platform_family?('smartos')
-#    end
-#  end
-#elsif node['tomcat']['install_from_tarball']
-  ark node['tomcat']['tarball_name'] do
-    url node['tomcat']['tarball_url']
-    path node['tomcat']['tarball_install_path']
-    owner node['tomcat']['user']
-    action :put
+node['tomcat']['packages'].each do |pkg|
+  package pkg do
+    action :install
   end
-#end
+end
+
+node['tomcat']['deploy_manager_packages'].each do |pkg|
+  package pkg do
+    action :install
+    only_if { node['tomcat']['deploy_manager_apps'] }
+  end
+end
 
 unless node['tomcat']['deploy_manager_apps']
   directory "#{node['tomcat']['webapp_dir']}/manager" do
