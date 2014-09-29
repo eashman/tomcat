@@ -72,14 +72,18 @@ action :configure do
 
     # The base also needs a bunch of to symlinks inside it
     ['bin', 'lib'].each do |dir|
-      link "#{new_resource.base}/#{dir}" do
+      unless Dir.exist? "#{new_resource.base}/#{dir}"
+        link "#{new_resource.base}/#{dir}" do
         to "#{node['tomcat']['base']}/#{dir}"
+        end
       end
     end
     {'conf' => 'config_dir', 'logs' => 'log_dir', 'temp' => 'tmp_dir',
      'work' => 'work_dir', 'webapps' => 'webapp_dir'}.each do |name, attr|
-      link "#{new_resource.base}/#{name}" do
-        to new_resource.instance_variable_get("@#{attr}")
+      unless Dir.exist? "#{new_resource.base}/#{name}"
+        link "#{new_resource.base}/#{name}" do
+          to new_resource.instance_variable_get("@#{attr}")
+        end
       end
     end
 
