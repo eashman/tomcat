@@ -113,7 +113,23 @@ action :configure do
   end
 
   case node['platform']
-  when 'centos', 'redhat', 'fedora', 'amazon', 'oracle'
+    when 'centos', 'redhat', 'fedora', 'amazon', 'oracle'
+    template "/etc/#{instance}/#{instance}.conf" do
+      source "sysconfig_tomcat#{node['tomcat']['base_version']}.erb"
+      variables ({
+                    :user => new_resource.user,
+                    :home => new_resource.home,
+                    :base => new_resource.base,
+                    :java_options => new_resource.java_options,
+                    :use_security_manager => new_resource.use_security_manager,
+                    :tmp_dir => new_resource.tmp_dir,
+                    :catalina_options => new_resource.catalina_options,
+                    :endorsed_dir => new_resource.endorsed_dir
+                })
+      owner 'root'
+      group 'root'
+      mode '0644'
+    end
     template "/etc/sysconfig/#{instance}" do
       source "sysconfig_tomcat#{node['tomcat']['base_version']}.erb"
       variables ({
