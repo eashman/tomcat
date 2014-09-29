@@ -99,7 +99,7 @@ action :configure do
     execute "/etc/init.d/#{instance}" do
       command <<-EOH
         cp /etc/init.d/#{base_instance} /etc/init.d/#{instance}
-        perl -i -pe 's/TOMCAT_SCRIPT=\\/usr\/sbin\\/#{base_instance}/TOMCAT_SCRIPT=\\/usr\\/sbin\\/#{instance}/g' /etc/init.d/#{instance}
+        perl -i -pe 's/TOMCAT_SCRIPT=\\/usr\/sbin\\/#{base_instance}\\/TOMCAT_SCRIPT=\\/usr\\/sbin\\/#{instance}/g' /etc/init.d/#{instance}
       EOH
     end
     execute "/usr/sbin/#{instance}" do
