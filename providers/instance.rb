@@ -1,6 +1,7 @@
 action :configure do
   base_instance = "tomcat#{node['tomcat']['base_version']}"
   base_instance = 'tomcat' if node['platform'] == 'centos' and node['tomcat']['base_version'] == 7
+  base_instance = 'tomcat' if node['tomcat']['centos']
 
   # Set defaults for resource attributes from node attributes. We can't do
   # this in the resource declaration because node isn't populated yet when
@@ -34,7 +35,7 @@ action :configure do
     [:base, :home, :config_dir, :log_dir, :work_dir, :context_dir,
      :webapp_dir].each do |attr|
       if not new_resource.instance_variable_get("@#{attr}") and node["tomcat"][attr]
-        new = node["tomcat"][attr].sub("tomcat#{node['tomcat']['base_version']}", "#{instance}")
+        new = node["tomcat"][attr].sub("tomcat", "#{instance}")
         new_resource.instance_variable_set("@#{attr}", new)
       end
     end
