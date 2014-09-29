@@ -53,6 +53,8 @@ default['tomcat']['install_from_package'] = true
 default['tomcat']['tarball_name'] = 'tomcat7'
 default['tomcat']['tarball_install_path'] = '/opt'
 default['tomcat']['include_java'] = true
+default['tomcat']['packages'] = ["tomcat#{node['tomcat']['base_version']}"]
+default['tomcat']['deploy_manager_packages'] = ["tomcat#{node['tomcat']['base_version']}-admin"]
 
 case node['platform']
 
@@ -70,6 +72,7 @@ when 'centos', 'redhat', 'fedora', 'amazon', 'scientific', 'oracle'
   default['tomcat']['keytool'] = 'keytool'
   default['tomcat']['lib_dir'] = "#{node["tomcat"]["home"]}/lib"
   default['tomcat']['endorsed_dir'] = "#{node["tomcat"]["lib_dir"]}/endorsed"
+  default['tomcat']['deploy_manager_packages'] = ["tomcat#{node['tomcat']['base_version']}-admin-webapps"]
 when 'debian', 'ubuntu'
   default['tomcat']['user'] = "tomcat#{node["tomcat"]["base_version"]}"
   default['tomcat']['group'] = "tomcat#{node["tomcat"]["base_version"]}"
