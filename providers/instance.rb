@@ -95,19 +95,47 @@ action :configure do
       #end
     end
 
-    # Make a copy of the init script for this instance
-    execute "/etc/init.d/#{instance}" do
-      command <<-EOH
-        cp /etc/init.d/#{base_instance} /etc/init.d/#{instance}
-        perl -i -pe 's/TOMCAT_SCRIPT=\\/usr\/sbin\\/#{base_instance}\\/TOMCAT_SCRIPT=\\/usr\\/sbin\\/#{instance}/g' /etc/init.d/#{instance}
-      EOH
+    if new_resource.name != 'base'
+
+      template "/etc/init.d/#{instance}" do
+        source "tomcat-initd.erb"
+        variables ({
+                      :instance_name => new_resource.name
+                  })
+        owner 'root'
+        group 'root'
+        mode '0755'
+        notifies :restart, "service[#{instance}]"
+      end
+
+      template "/usr/sbin/#{instance}" do
+        source "tomcat-sbin.erb"
+        variables ({
+                      :instance_name => new_resource.name
+                  })
+        owner 'root'
+        group 'root'
+        mode '0755'
+        notifies :restart, "service[#{instance}]"
+      end
+
     end
-    execute "/usr/sbin/#{instance}" do
-      command <<-EOH
-        cp /usr/sbin/#{base_instance} /usr/sbin/#{instance}
-        perl -i -pe 's/set_javacmd/source \\/etc\\/sysconfig\\/#{instance}\nset_javacmd/g' /etc/init.d/#{instance}
-      EOH
-    end
+
+
+
+    # # Make a copy of the init script for this instance
+    # execute "/etc/init.d/#{instance}" do
+    #   command <<-EOH
+    #     cp /etc/init.d/#{base_instance} /etc/init.d/#{instance}
+    #     perl -i -pe 's/TOMCAT_SCRIPT=\\/usr\/sbin\\/#{base_instance}\\/TOMCAT_SCRIPT=\\/usr\\/sbin\\/#{instance}/g' /etc/init.d/#{instance}
+    #   EOH
+    # end
+    # execute "/usr/sbin/#{instance}" do
+    #   command <<-EOH
+    #     cp /usr/sbin/#{base_instance} /usr/sbin/#{instance}
+    #     perl -i -pe 's/set_javacmd/source \\/etc\\/sysconfig\\/#{instance}\nset_javacmd/g' /etc/init.d/#{instance}
+    #   EOH
+    # end
   end
 
   # Even for the base instance, the OS package may not make this directory
