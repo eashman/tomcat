@@ -16,7 +16,7 @@ if [ -r "$TOMCAT_CFG" ]; then
   . $TOMCAT_CFG
 fi
 
-source /etc/sysconfig/<%= @instance_name %>
+source /etc/sysconfig/tomcat-<%= @instance_name %>
 
 set_javacmd
 # CLASSPATH munging
