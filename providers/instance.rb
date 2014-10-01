@@ -70,6 +70,14 @@ action :configure do
       end
     end
 
+
+    #put resource owner in tomcat group
+    group "tomcat" do
+      action :modify
+      members new_resource.user
+      append true
+    end
+
     # config_dir needs symlinks to the files we're not going to create
     ['catalina.policy', 'catalina.properties', 'context.xml',
      'tomcat-users.xml', 'web.xml'].each do |file|
