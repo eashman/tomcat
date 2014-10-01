@@ -50,13 +50,13 @@ action :configure do
     # Create the directories, since the OS package wouldn't have
     [:base, :config_dir, :context_dir].each do |attr|
       directory new_resource.instance_variable_get("@#{attr}") do
-        mode '0755'
+        mode '0775'
         recursive true
       end
     end
     [:log_dir, :work_dir, :webapp_dir].each do |attr|
       directory new_resource.instance_variable_get("@#{attr}") do
-        mode '0755'
+        mode '0775'
         recursive true
         user new_resource.user
         group new_resource.group
@@ -104,7 +104,7 @@ action :configure do
                   })
         owner 'root'
         group 'root'
-        mode '0755'
+        mode '0775'
         notifies :restart, "service[#{instance}]"
       end
 
@@ -115,7 +115,7 @@ action :configure do
                   })
         owner 'root'
         group 'root'
-        mode '0755'
+        mode '0775'
         notifies :restart, "service[#{instance}]"
       end
 
@@ -141,7 +141,7 @@ action :configure do
   # Even for the base instance, the OS package may not make this directory
   unless Dir.exist? new_resource.endorsed_dir
     directory new_resource.endorsed_dir do
-      mode '0755'
+      mode '0775'
       recursive true
     end
   end
@@ -186,7 +186,7 @@ action :configure do
       })
       owner 'root'
       group 'root'
-      mode '0644'
+      mode '0664'
       notifies :restart, "service[#{instance}]"
     end
   when 'smartos'
@@ -195,7 +195,7 @@ action :configure do
       source 'setenv.sh.erb'
       owner 'root'
       group 'root'
-      mode '0644'
+      mode '0664'
       notifies :restart, "service[#{instance}]"
     end
   else
@@ -215,7 +215,7 @@ action :configure do
       })
       owner 'root'
       group 'root'
-      mode '0644'
+      mode '0664'
       notifies :restart, "service[#{instance}]"
     end
   end
@@ -238,7 +238,7 @@ action :configure do
       })
     owner 'root'
     group 'root'
-    mode '0644'
+    mode '0664'
     notifies :restart, "service[#{instance}]"
   end
 
@@ -246,7 +246,7 @@ action :configure do
     source 'logging.properties.erb'
     owner 'root'
     group 'root'
-    mode '0644'
+    mode '0664'
     notifies :restart, "service[#{instance}]"
   end
 
@@ -286,18 +286,18 @@ action :configure do
       end
   
       cookbook_file "#{new_resource.config_dir}/#{new_resource.ssl_cert_file}" do
-        mode '0644'
+        mode '0664'
         notifies :run, "script[create_keystore-#{instance}]"
       end
   
       cookbook_file "#{new_resource.config_dir}/#{new_resource.ssl_key_file}" do
-        mode '0644'
+        mode '0664'
         notifies :run, "script[create_keystore-#{instance}]"
       end
   
       new_resource.ssl_chain_files.each do |cert|
         cookbook_file "#{new_resource.config_dir}/#{cert}" do
-          mode '0644'
+          mode '0664'
           notifies :run, "script[create_keystore-#{instance}]"
         end
       end
@@ -305,7 +305,7 @@ action :configure do
   
     unless new_resource.truststore_file.nil?
       cookbook_file "#{new_resource.config_dir}/#{new_resource.truststore_file}" do
-        mode '0644'
+        mode '0664'
       end
     end
   end
