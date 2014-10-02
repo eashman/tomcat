@@ -161,7 +161,15 @@ action :configure do
     new_resource.java_options = java_options
   end
 
-  case node['platform']
+
+  # create the conf dir if its not there for some reason
+  directory "/etc/#{instance}" do
+    owner new_resource.user
+    group new_resource.group
+    mode '0775'
+  end
+
+    case node['platform']
     when 'centos', 'redhat', 'fedora', 'amazon', 'oracle'
     template "/etc/#{instance}/#{instance}.conf" do
       source "sysconfig_tomcat#{node['tomcat']['base_version']}.erb"
@@ -179,6 +187,7 @@ action :configure do
       user new_resource.user
       group new_resource.group
       mode '0644'
+      recursive true
     end
     template "/etc/sysconfig/#{instance}" do
       source "sysconfig_tomcat#{node['tomcat']['base_version']}.erb"
@@ -192,7 +201,7 @@ action :configure do
         :catalina_options => new_resource.catalina_options,
         :endorsed_dir => new_resource.endorsed_dir
       })
-      user new_resource.user
+      owner new_resource.user
       group new_resource.group
       mode '0664'
       notifies :restart, "service[#{instance}]"
