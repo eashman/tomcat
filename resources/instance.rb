@@ -86,4 +86,6 @@ attribute :endorsed_dir,
   :kind_of => String
 attribute :pid,
   :kind_of => String
+attribute :props_dir,
+  :kind_of => String
 

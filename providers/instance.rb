@@ -10,7 +10,7 @@ action :configure do
    :max_threads, :ssl_max_threads, :ssl_cert_file, :ssl_key_file,
    :ssl_chain_files, :keystore_file, :keystore_type, :truststore_file,
    :truststore_type, :certificate_dn, :loglevel, :tomcat_auth, :user,
-   :group, :tmp_dir, :lib_dir, :endorsed_dir, :pid].each do |attr|
+   :group, :tmp_dir, :lib_dir, :endorsed_dir, :pid, :props_dir].each do |attr|
     if not new_resource.instance_variable_get("@#{attr}")
       new_resource.instance_variable_set("@#{attr}", node['tomcat'][attr])
     end
@@ -40,7 +40,7 @@ action :configure do
     # If they weren't set explicitly, set these paths to the default with
     # the base instance name replaced with our own
     [:base, :home, :config_dir, :log_dir, :work_dir, :context_dir,
-     :webapp_dir].each do |attr|
+     :webapp_dir, :props_dir].each do |attr|
       if not new_resource.instance_variable_get("@#{attr}") and node["tomcat"][attr]
         new = node["tomcat"][attr].sub("tomcat", "#{instance}")
         new_resource.instance_variable_set("@#{attr}", new)
@@ -54,7 +54,7 @@ action :configure do
         recursive true
       end
     end
-    [:log_dir, :work_dir, :webapp_dir].each do |attr|
+    [:log_dir, :work_dir, :webapp_dir, :props_dir].each do |attr|
       directory new_resource.instance_variable_get("@#{attr}") do
         mode '0775'
         recursive true
@@ -176,8 +176,8 @@ action :configure do
                     :endorsed_dir => new_resource.endorsed_dir,
                     :pid => new_resource.pid
                 })
-      owner 'root'
-      group 'root'
+      user new_resource.user
+      group new_resource.group
       mode '0644'
     end
     template "/etc/sysconfig/#{instance}" do
@@ -192,8 +192,8 @@ action :configure do
         :catalina_options => new_resource.catalina_options,
         :endorsed_dir => new_resource.endorsed_dir
       })
-      owner 'root'
-      group 'root'
+      user new_resource.user
+      group new_resource.group
       mode '0664'
       notifies :restart, "service[#{instance}]"
     end
@@ -244,16 +244,16 @@ action :configure do
         :tomcat_auth => new_resource.tomcat_auth,
         :config_dir => new_resource.config_dir,
       })
-    owner 'root'
-    group 'root'
+    user new_resource.user
+    group new_resource.group
     mode '0664'
     notifies :restart, "service[#{instance}]"
   end
 
   template "#{new_resource.config_dir}/logging.properties" do
     source 'logging.properties.erb'
-    owner 'root'
-    group 'root'
+    user new_resource.user
+    group new_resource.group
     mode '0664'
     notifies :restart, "service[#{instance}]"
   end

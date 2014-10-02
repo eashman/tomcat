@@ -66,6 +66,7 @@ when 'centos', 'redhat', 'fedora', 'amazon', 'scientific', 'oracle'
   default['tomcat']['config_dir'] = "/etc/tomcat#{node["tomcat"]["base_version"]}"
   default['tomcat']['log_dir'] = "/var/log/tomcat#{node["tomcat"]["base_version"]}"
   default['tomcat']['tmp_dir'] = "/var/cache/tomcat#{node["tomcat"]["base_version"]}/temp"
+  default['tomcat']['props_dir'] = "/etc/tomcat#{node["tomcat"]["base_version"]}/props"
   default['tomcat']['work_dir'] = "/var/cache/tomcat#{node["tomcat"]["base_version"]}/work"
   default['tomcat']['context_dir'] = "#{node["tomcat"]["config_dir"]}/Catalina/localhost"
   default['tomcat']['webapp_dir'] = "/var/lib/tomcat#{node["tomcat"]["base_version"]}/webapps"
