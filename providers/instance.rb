@@ -187,7 +187,6 @@ action :configure do
       user new_resource.user
       group new_resource.group
       mode '0644'
-      recursive true
     end
     template "/etc/sysconfig/#{instance}" do
       source "sysconfig_tomcat#{node['tomcat']['base_version']}.erb"
