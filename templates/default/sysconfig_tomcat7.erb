@@ -29,8 +29,10 @@ CATALINA_HOME="<%= @home %>"
 JASPER_HOME="<%= @home %>"
 CATALINA_TMPDIR="<%= @tmp_dir %>"
 CATALINA_PID="<%= @pid %>"
+CATALINA_OPTS="-D<%= @props_conf %> <%= @catalina_ops %>"
 
-# You can pass some parameters to java here if you wish to
+
+  # You can pass some parameters to java here if you wish to
 JAVA_OPTS="<%= @java_options %>"
 
 # Use JAVA_OPTS to set java.library.path for libtcnative.so
@@ -55,7 +57,6 @@ SECURITY_MANAGER="<%= @use_security_manager %>"
 #CATALINA_PID="/var/run/tomcat6.pid"
 
 # JVM parameters passed only for start and run commands
-CATALINA_OPTS="<%= @catalina_options %>"
 
 # Endorse .jar files in this directory
 JAVA_ENDORSED_DIRS="<%= @endorsed_dir %>"

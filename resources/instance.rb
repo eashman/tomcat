@@ -88,4 +88,7 @@ attribute :pid,
   :kind_of => String
 attribute :props_dir,
   :kind_of => String
+attribute :props_conf,
+  :kind_of => String
+
 

@@ -10,7 +10,7 @@ action :configure do
    :max_threads, :ssl_max_threads, :ssl_cert_file, :ssl_key_file,
    :ssl_chain_files, :keystore_file, :keystore_type, :truststore_file,
    :truststore_type, :certificate_dn, :loglevel, :tomcat_auth, :user,
-   :group, :tmp_dir, :lib_dir, :endorsed_dir, :pid, :props_dir].each do |attr|
+   :group, :tmp_dir, :lib_dir, :endorsed_dir, :pid, :props_dir, :props_conf].each do |attr|
     if not new_resource.instance_variable_get("@#{attr}")
       new_resource.instance_variable_set("@#{attr}", node['tomcat'][attr])
     end
@@ -198,7 +198,8 @@ action :configure do
         :use_security_manager => new_resource.use_security_manager,
         :tmp_dir => new_resource.tmp_dir,
         :catalina_options => new_resource.catalina_options,
-        :endorsed_dir => new_resource.endorsed_dir
+        :endorsed_dir => new_resource.endorsed_dir,
+        :props_conf => new_resource.props_conf
       })
       owner new_resource.user
       group new_resource.group
