@@ -51,6 +51,8 @@ action :configure do
     [:base, :config_dir, :context_dir].each do |attr|
       directory new_resource.instance_variable_get("@#{attr}") do
         mode '0775'
+        user new_resource.user
+        group new_resource.group
         recursive true
       end
     end
