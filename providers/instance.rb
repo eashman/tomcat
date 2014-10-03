@@ -184,7 +184,8 @@ action :configure do
                     :tmp_dir => new_resource.tmp_dir,
                     :catalina_options => new_resource.catalina_options,
                     :endorsed_dir => new_resource.endorsed_dir,
-                    :pid => new_resource.pid
+                    :pid => new_resource.pid,
+                    :props_conf => new_resource.props_conf
                 })
       user new_resource.user
       group new_resource.group
