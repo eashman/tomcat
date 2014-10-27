@@ -176,12 +176,7 @@ function start() {
         makeHomeDir
         # If CATALINA_HOME doesn't exist modify port number so that
         # multiple instances don't interfere with each other
-        findFreePorts
-        sed -i -e "s/8005/${randomPort1}/g" -e "s/8080/${CONNECTOR_PORT}/g" \
-            -e "s/8009/${randomPort2}/g" -e "s/8443/${randomPort3}/g" \
-            ${CATALINA_HOME}/conf/server.xml
     fi
-    parseOptions
     if [ "$RETVAL" -eq "0" -a "$SECURITY_MANAGER" = "true" ]; then
         $SU - $TOMCAT_USER -c "${TOMCAT_SCRIPT} start-security" \
             >> ${TOMCAT_LOG} 2>&1 || RETVAL="4"
